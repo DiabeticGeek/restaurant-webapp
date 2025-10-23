@@ -45,6 +45,7 @@ export type MenuItem = {
   price: number
   cost: number
   active: boolean
+  destination: 'kitchen' | 'bar'
 }
 
 export type MenuCategory = {
@@ -77,4 +78,28 @@ export type OrderItem = {
   notes?: string
   status: 'pending' | 'preparing' | 'ready' | 'delivered' | 'cancelled'
   destination: 'kitchen' | 'bar'
+}
+
+export type LayoutItem = {
+  id: string
+  type: 'table' | 'chair' | 'bar' | 'wall' | 'door' | 'other'
+  shape: 'rectangle' | 'circle' | 'oval'
+  x: number
+  y: number
+  width: number
+  height: number
+  rotation: number
+  name: string
+  capacity?: number
+  color?: string
+}
+
+export type Layout = {
+  id: string
+  name: string
+  gridSize: {
+    width: number
+    height: number
+  }
+  items: LayoutItem[]
 }
