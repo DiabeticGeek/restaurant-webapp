@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FiSquare, FiCircle, FiCoffee, FiMenu, FiGrid } from 'react-icons/fi'
-import { LayoutItem } from '../../pages/owner/FloorLayout'
+import { LayoutItem } from '../../utils/supabaseClient'
 
 interface LayoutControlsProps {
   addItem: (type: LayoutItem['type'], shape: LayoutItem['shape']) => void

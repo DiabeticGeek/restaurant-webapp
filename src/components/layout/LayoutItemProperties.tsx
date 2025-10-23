@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiTrash2 } from 'react-icons/fi'
-import { LayoutItem } from '../../pages/owner/FloorLayout'
+import { LayoutItem } from '../../utils/supabaseClient'
 
 interface LayoutItemPropertiesProps {
   item: LayoutItem

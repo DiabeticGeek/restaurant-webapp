@@ -54,6 +54,7 @@ export type MenuCategory = {
   restaurant_id: string
   parent_category_id?: string
   name: string
+  description?: string
   order: number
 }
 

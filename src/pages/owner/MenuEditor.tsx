@@ -15,6 +15,8 @@ const MenuEditor = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
   const [categoryDraft, setCategoryDraft] = useState<Partial<MenuCategory> | null>(null)
   const [itemDraft, setItemDraft] = useState<Partial<MenuItem> | null>(null)
+  const [showCategoryForm, setShowCategoryForm] = useState(false)
+  const [showItemForm, setShowItemForm] = useState(false)
 
   const categoriesQuery = useQuery({
     queryKey: ['menu-categories', user?.restaurantId],
@@ -74,6 +76,7 @@ const MenuEditor = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['menu-categories', user?.restaurantId] })
       setCategoryDraft(null)
+      setShowCategoryForm(false)
     },
   })
 
@@ -107,6 +110,7 @@ const MenuEditor = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['menu-items', user?.restaurantId] })
       setItemDraft(null)
+      setShowItemForm(false)
     },
   })
 
@@ -131,7 +135,7 @@ const MenuEditor = () => {
             <button
               className="btn btn-secondary flex items-center"
               onClick={() => {
-                setCategoryDraft({ name: '', description: '', parent_category_id: null })
+                setCategoryDraft({ name: '', description: '', parent_category_id: undefined })
                 setShowCategoryForm(true)
               }}
             >
@@ -348,7 +352,7 @@ const CategoryForm = ({ draft, roots, onChange, onCancel, onSubmit, saving }: Ca
             id="category-parent"
             className="input"
             value={draft.parent_category_id ?? ''}
-            onChange={(e) => onChange({ ...draft, parent_category_id: e.target.value || null })}
+            onChange={(e) => onChange({ ...draft, parent_category_id: e.target.value || undefined })}
           >
             <option value="">None</option>
             {roots.map((cat) => (
