@@ -5,7 +5,11 @@ import { useAuth } from './hooks/useAuth'
 import MainLayout from './layouts/MainLayout'
 import AuthLayout from './layouts/AuthLayout'
 import ProtectedRoute from './components/ProtectedRoute'
-import Login from './pages/auth/Login'
+import RoleSelector from './pages/auth/RoleSelector';
+import OwnerLogin from './pages/auth/OwnerLogin';
+import ServerLogin from './pages/auth/ServerLogin';
+import KitchenLogin from './pages/auth/KitchenLogin';
+import BarLogin from './pages/auth/BarLogin';
 import Register from './pages/auth/Register'
 import Dashboard from './pages/owner/Dashboard'
 import FloorLayout from './pages/owner/FloorLayout'
@@ -25,7 +29,11 @@ function App() {
       <Routes>
         {/* Auth Routes */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+                    <Route path="/login" element={!user ? <RoleSelector /> : <Navigate to="/dashboard" />} />
+            <Route path="/login/owner" element={!user ? <OwnerLogin /> : <Navigate to="/dashboard" />} />
+            <Route path="/login/server" element={!user ? <ServerLogin /> : <Navigate to="/server" />} />
+            <Route path="/login/kitchen" element={!user ? <KitchenLogin /> : <Navigate to="/kitchen" />} />
+            <Route path="/login/bar" element={!user ? <BarLogin /> : <Navigate to="/bar" />} />
           <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
         </Route>
 

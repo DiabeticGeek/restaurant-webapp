@@ -13,7 +13,7 @@ Create a secure, user-friendly app to streamline restaurant operations, accessib
 ## Features to Build
 - **Owner Dashboard**:
   - Drag-and-drop floor layout editor (tables, chairs & bar. Chair will always be round, Allow people to adjust size of everything(Tables, chairs, bar, Layout tile grid), Make the layout tile grid 500x500 standard, Make sure people can  change it to 200x500 for example, or whatever size fits. Also allow them to place square or and round tables, aswell as oval tables. Basically allow them to customize the table format and size, Same goes for bar, allow them to place it anywhere, and customize the size of the bar. Just make it as easy as possible to make their restaurant exactly the same as in real life. ). 
-  - Menu editor for menus, nested categories, and items (name, price, cost).
+  - Menu editor for menus, nested categories, and items (name, price, cost), Selector for where the item will be made (Bar, Kitchen etc. defined by how many bars and kitchens there are.).
   - Analytics showing sales, item counts, costs, profits (daily, weekly, monthly, yearly).
   - Staff account management (create accounts with roles: owner, server, kitchen, bar).
 - **Server App**:
