@@ -18,15 +18,7 @@ import BarDisplay from './pages/bar/BarDisplay'
 import NotFound from './pages/NotFound'
 
 function App() {
-  const { user, loading } = useAuth()
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
+  const { user } = useAuth()
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -40,52 +32,28 @@ function App() {
         {/* Protected Routes */}
         <Route element={<MainLayout />}>
           {/* Owner Routes */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute allowedRoles={['owner']}>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/floor-layout" element={
-            <ProtectedRoute allowedRoles={['owner']}>
-              <FloorLayout />
-            </ProtectedRoute>
-          } />
-          <Route path="/menu-editor" element={
-            <ProtectedRoute allowedRoles={['owner']}>
-              <MenuEditor />
-            </ProtectedRoute>
-          } />
-          <Route path="/analytics" element={
-            <ProtectedRoute allowedRoles={['owner']}>
-              <Analytics />
-            </ProtectedRoute>
-          } />
-          <Route path="/staff" element={
-            <ProtectedRoute allowedRoles={['owner']}>
-              <StaffManagement />
-            </ProtectedRoute>
-          } />
+          <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/floor-layout" element={<FloorLayout />} />
+            <Route path="/menu-editor" element={<MenuEditor />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/staff" element={<StaffManagement />} />
+          </Route>
 
           {/* Server Routes */}
-          <Route path="/server" element={
-            <ProtectedRoute allowedRoles={['owner', 'server']}>
-              <ServerView />
-            </ProtectedRoute>
-          } />
+          <Route element={<ProtectedRoute allowedRoles={['owner', 'server']} />}>
+            <Route path="/server" element={<ServerView />} />
+          </Route>
 
           {/* Kitchen Routes */}
-          <Route path="/kitchen" element={
-            <ProtectedRoute allowedRoles={['owner', 'kitchen']}>
-              <KitchenDisplay />
-            </ProtectedRoute>
-          } />
+          <Route element={<ProtectedRoute allowedRoles={['owner', 'kitchen']} />}>
+            <Route path="/kitchen" element={<KitchenDisplay />} />
+          </Route>
 
           {/* Bar Routes */}
-          <Route path="/bar" element={
-            <ProtectedRoute allowedRoles={['owner', 'bar']}>
-              <BarDisplay />
-            </ProtectedRoute>
-          } />
+          <Route element={<ProtectedRoute allowedRoles={['owner', 'bar']} />}>
+            <Route path="/bar" element={<BarDisplay />} />
+          </Route>
         </Route>
 
         {/* Redirect from root to dashboard or login */}

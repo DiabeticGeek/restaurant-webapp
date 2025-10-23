@@ -31,56 +31,67 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<UserWithRole | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<UserWithRole | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user as UserWithRole ?? null)
-      setLoading(false)
-    })
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session)
-        setUser(session?.user as UserWithRole ?? null)
-        setLoading(false)
+    const fetchSessionAndProfile = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        setLoading(false);
+        return;
       }
-    )
 
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
+      setSession(session);
 
-  // Fetch user role when user changes
-  useEffect(() => {
-    async function getUserRole() {
-      if (user) {
-        const { data, error } = await supabase
+      if (session?.user) {
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('role, restaurant_id')
-          .eq('id', user.id)
-          .single()
+          .eq('id', session.user.id)
+          .single();
 
-        if (data && !error) {
-          setUser((prevUser) => ({
-            ...prevUser!,
-            role: data.role as UserRole,
-            restaurantId: data.restaurant_id
-          }))
+        if (profileError) {
+          // Handle error, maybe sign out user
+          setLoading(false);
+          return;
         }
-      }
-    }
 
-    if (user) {
-      getUserRole()
-    }
-  }, [user?.id])
+        setUser({ ...session.user, role: profile.role, restaurantId: profile.restaurant_id });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    };
+
+    fetchSessionAndProfile();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session?.user) {
+        // Fetch profile on auth change
+        supabase
+          .from('profiles')
+          .select('role, restaurant_id')
+          .eq('id', session.user.id)
+          .single()
+          .then(({ data: profile, error }) => {
+            if (!error && profile) {
+              setUser({ ...session.user, role: profile.role, restaurantId: profile.restaurant_id });
+            } else {
+              setUser(session.user as UserWithRole);
+            }
+          });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({

@@ -1,12 +1,11 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 interface ProtectedRouteProps {
-  children: React.ReactNode
   allowedRoles: string[]
 }
 
-const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const { user, loading } = useAuth()
 
   if (loading) {
@@ -23,7 +22,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
 
   // Check if user has the required role
   if (user.role && allowedRoles.includes(user.role)) {
-    return <>{children}</>
+    return <Outlet />
   }
 
   // Redirect to appropriate page based on user role

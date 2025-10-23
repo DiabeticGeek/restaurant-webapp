@@ -5,36 +5,26 @@ import { FiGrid, FiLayout, FiBookOpen, FiBarChart2, FiUsers, FiClipboard, FiCoff
 const Navigation = () => {
   const { user, signOut } = useAuth();
 
-  const ownerLinks = [
-    { path: '/dashboard', label: 'Dashboard', icon: <FiGrid /> },
-    { path: '/floor-layout', label: 'Floor Layout', icon: <FiLayout /> },
-    { path: '/menu-editor', label: 'Menu Editor', icon: <FiBookOpen /> },
-    { path: '/analytics', label: 'Analytics', icon: <FiBarChart2 /> },
-    { path: '/staff', label: 'Staff', icon: <FiUsers /> },
-  ];
+  const roleLinks = new Map([
+    ['owner', [
+      { path: '/dashboard', label: 'Dashboard', icon: <FiGrid /> },
+      { path: '/floor-layout', label: 'Floor Layout', icon: <FiLayout /> },
+      { path: '/menu-editor', label: 'Menu Editor', icon: <FiBookOpen /> },
+      { path: '/analytics', label: 'Analytics', icon: <FiBarChart2 /> },
+      { path: '/staff', label: 'Staff', icon: <FiUsers /> },
+    ]],
+    ['server', [
+      { path: '/server', label: 'Server View', icon: <FiClipboard /> },
+    ]],
+    ['kitchen', [
+      { path: '/kitchen', label: 'Kitchen Display', icon: <FiBookOpen /> },
+    ]],
+    ['bar', [
+      { path: '/bar', label: 'Bar Display', icon: <FiCoffee /> },
+    ]],
+  ]);
 
-  const serverLinks = [
-    { path: '/server', label: 'Server View', icon: <FiClipboard /> },
-  ];
-
-  const kitchenLinks = [
-    { path: '/kitchen', label: 'Kitchen Display', icon: <FiBookOpen /> },
-  ];
-
-  const barLinks = [
-    { path: '/bar', label: 'Bar Display', icon: <FiCoffee /> },
-  ];
-
-  let links: { path: string; label: string; icon: JSX.Element; }[] = [];
-  if (user?.role === 'owner') {
-    links = ownerLinks;
-  } else if (user?.role === 'server') {
-    links = serverLinks;
-  } else if (user?.role === 'kitchen') {
-    links = kitchenLinks;
-  } else if (user?.role === 'bar') {
-    links = barLinks;
-  }
+  const links = user?.role ? roleLinks.get(user.role) || [] : [];
 
   return (
     <nav className="bg-gray-800 text-white w-64 min-h-screen p-4 flex flex-col">
